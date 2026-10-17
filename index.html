@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Buku Poin</title>
+<link rel="manifest" href="manifest.webmanifest">
+<meta name="theme-color" content="#0f766e">
+<link rel="icon" href="icon-192.png">
+<link rel="apple-touch-icon" href="icon-192.png">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<style>
+:root{--bg:#eef4f1;--sf:#fff;--ink:#10231c;--mute:#5b6f66;--line:#d3e0da;--ac:#0f766e;--acx:#fff;--bad:#b42318;--badbg:#fde8e6;--good:#0f766e;--goodbg:#d8f1ec;
+box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#0c1714;--sf:#14241f;--ink:#e6f2ed;--mute:#93aaa0;--line:#244037;--ac:#4fd1c2;--acx:#07211d;--bad:#ff8a7d;--badbg:#3a1a17;--good:#4fd1c2;--goodbg:#0f3430;color-scheme:dark}}
+:root[data-theme="dark"]{--bg:#0c1714;--sf:#14241f;--ink:#e6f2ed;--mute:#93aaa0;--line:#244037;--ac:#4fd1c2;--acx:#07211d;--bad:#ff8a7d;--badbg:#3a1a17;--good:#4fd1c2;--goodbg:#0f3430;color-scheme:dark}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+*{box-sizing:inherit}
+body{margin:0;background:var(--bg);color:var(--ink);font:400 16px/1.5 "Bricolage Grotesque","Avenir Next","Segoe UI",system-ui,sans-serif}
+main{max-width:640px;margin:0 auto;padding:20px 16px 56px}
+h1{font-size:1.9rem;font-weight:800;letter-spacing:-.02em;margin:6px 0 16px}
+h2{font-size:1.15rem;font-weight:800;margin:28px 0 10px}
+.card{background:var(--sf);border:1px solid var(--line);border-radius:16px;padding:16px}
+.bal{display:flex;align-items:flex-end;justify-content:space-between;gap:12px}
+.num{font-size:3.4rem;font-weight:800;line-height:1;letter-spacing:-.03em}
+.num.neg{color:var(--bad)}.num.pos,.num.zero{color:var(--good)}
+.lbl{color:var(--mute);font-size:.9rem}
+.pill{display:inline-block;border-radius:99px;padding:4px 12px;font-weight:600;font-size:.85rem}
+.pill.neg{background:var(--badbg);color:var(--bad)}.pill.pos,.pill.zero{background:var(--goodbg);color:var(--good)}
+.stats{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:14px}
+.stat{background:var(--bg);border-radius:12px;padding:10px 12px}
+.stat b{display:block;font-size:1.3rem}
+.dt{display:flex;align-items:center;gap:10px;margin:18px 0 0}
+input,button{font:inherit;color:inherit}
+input{background:var(--bg);border:1px solid var(--line);border-radius:10px;padding:8px 10px;min-width:0}
+input[type=number]{width:70px}
+.row{display:flex;align-items:center;gap:8px;padding:10px 0;border-top:1px solid var(--line)}
+.row:first-child{border-top:0}
+.row .nm{flex:1;min-width:0}
+.row .nm b{font-weight:600}.row small{display:block;color:var(--mute)}
+.btn{appearance:none;border:0;border-radius:10px;padding:9px 14px;font-weight:700;cursor:pointer;background:var(--ac);color:var(--acx)}
+.btn.bad{background:var(--bad);color:var(--bg)}
+.btn.ghost{background:transparent;color:var(--mute);border:1px solid var(--line)}
+.x{appearance:none;border:0;background:none;color:var(--mute);font-size:1.3rem;cursor:pointer;padding:4px 8px}
+button:focus-visible,input:focus-visible,summary:focus-visible{outline:3px solid var(--ac);outline-offset:2px}
+.sign{font-weight:800;min-width:46px;text-align:right}.sign.neg{color:var(--bad)}.sign.pos{color:var(--good)}
+details{margin-top:28px}
+summary{font-weight:800;font-size:1.15rem;cursor:pointer;margin-bottom:10px}
+.ed{display:flex;flex-wrap:wrap;gap:6px;align-items:center;padding:8px 0;border-top:1px solid var(--line)}
+.ed .t{flex:1 1 140px}.ed .u{flex:1 1 90px}
+textarea{width:100%;min-height:110px;background:var(--bg);color:var(--ink);border:1px solid var(--line);border-radius:10px;padding:10px;font:12px/1.4 ui-monospace,monospace}
+.empty{color:var(--mute);padding:8px 0}
+.foot{margin-top:24px;color:var(--mute);font-size:.85rem}
+</style>
+</head>
+<body>
+<main>
+<h1>Buku Poin</h1>
+<section class="card">
+ <div class="bal"><div><div class="lbl">Saldo poin</div><div class="num" id="bal">0</div></div><span class="pill" id="pill"></span></div>
+ <div class="stats"><div class="stat"><span class="lbl">Hari ini</span><b id="st1">0</b></div><div class="stat"><span class="lbl">7 hari terakhir</span><b id="st7">0</b></div></div>
+ <div class="dt"><label for="dt" class="lbl">Tanggal catatan</label><input type="date" id="dt"></div>
+</section>
+
+<h2>Catat pelanggaran</h2>
+<section class="card" id="vl"></section>
+<h2>Catat penebusan</h2>
+<section class="card" id="pl"></section>
+<h2>Riwayat</h2>
+<section class="card" id="lg"></section>
+
+<details><summary>Atur aturan &amp; poin</summary><section class="card" id="ru"></section></details>
+<details><summary>Cadangan data</summary><section class="card">
+ <p class="lbl" style="margin-top:0">Data tersimpan di browser ini saja. Salin teks di bawah ke catatan untuk cadangan, atau tempel teks cadangan lalu tekan Pulihkan.</p>
+ <textarea id="bk" aria-label="Teks cadangan"></textarea>
+ <div style="display:flex;gap:8px;margin-top:10px"><button class="btn" data-a="copy">Salin</button><button class="btn ghost" data-a="restore">Pulihkan</button><button class="btn ghost" data-a="wipe">Hapus semua</button></div>
+ <p class="lbl" id="bkm" role="status"></p>
+</section></details>
+<p class="foot">Saldo = total penebusan − total pelanggaran. Negatif berarti masih ada poin yang harus dilunasi; poin lebih dari nol dihitung sebagai surplus.</p>
+</main>
+<script>
+var KEY="buku-poin-v1";
+function uid(){return Math.random().toString(36).slice(2,9)}
+function def(){return{v:[{id:uid(),n:"Merokok",p:10},{id:uid(),n:"Over (hiburan HP/laptop > 2 jam)",p:20},{id:uid(),n:"P",p:10},{id:uid(),n:"M",p:10},{id:uid(),n:"U",p:10}],
+p:[{id:uid(),n:"Sehari tanpa rokok, P, M, U",p:1,u:"hari"},{id:uid(),n:"Baca Al-Qur’an",p:1,u:"1 juz"},{id:uid(),n:"Baca buku apa pun",p:1,u:"1 bab"},{id:uid(),n:"Hadiah untuk keluarga/keponakan",p:1,u:"Rp1.000"},{id:uid(),n:"Zikir astagfirullah",p:1,u:"1000 kali"},{id:uid(),n:"Sholawat",p:1,u:"1000 kali"},{id:uid(),n:"Al-Fatihah",p:1,u:"100 kali"}],log:[]}}
+var S;
+try{S=JSON.parse(localStorage.getItem(KEY))}catch(e){}
+if(!S||!S.v||!S.p||!S.log)S=def();
+function save(){try{localStorage.setItem(KEY,JSON.stringify(S))}catch(e){}}
+function today(){var d=new Date();d.setMinutes(d.getMinutes()-d.getTimezoneOffset());return d.toISOString().slice(0,10)}
+function esc(s){return String(s).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/"/g,"&quot;")}
+function val(l){return(l.t==="p"?1:-1)*l.pts*l.qty}
+function sum(a){return a.reduce(function(x,l){return x+val(l)},0)}
+function fmt(n){return(n>0?"+":"")+n}
+var $=function(i){return document.getElementById(i)};
+var dt=$("dt");dt.value=today();
+function render(){
+ var b=sum(S.log),c=b<0?"neg":b>0?"pos":"zero";
+ $("bal").textContent=b;$("bal").className="num "+c;
+ $("pill").className="pill "+c;$("pill").textContent=b<0?"Belum lunas":b>0?"Surplus":"Lunas";
+ var t=today(),w=new Date();w.setDate(w.getDate()-6);w.setMinutes(w.getMinutes()-w.getTimezoneOffset());var ws=w.toISOString().slice(0,10);
+ $("st1").textContent=fmt(sum(S.log.filter(function(l){return l.d===t})));
+ $("st7").textContent=fmt(sum(S.log.filter(function(l){return l.d>=ws&&l.d<=t})));
+ $("vl").innerHTML=S.v.length?S.v.map(function(r){return'<div class="row"><div class="nm"><b>'+esc(r.n)+'</b><small>−'+r.p+' poin</small></div><input type="number" min="1" value="1" aria-label="Jumlah"><button class="btn bad" data-a="add" data-t="v" data-id="'+r.id+'">Catat</button></div>'}).join(""):'<div class="empty">Belum ada aturan pelanggaran.</div>';
+ $("pl").innerHTML=S.p.length?S.p.map(function(r){return'<div class="row"><div class="nm"><b>'+esc(r.n)+'</b><small>+'+r.p+' poin per '+esc(r.u)+'</small></div><input type="number" min="1" value="1" aria-label="Jumlah"><button class="btn" data-a="add" data-t="p" data-id="'+r.id+'">Catat</button></div>'}).join(""):'<div class="empty">Belum ada aturan penebusan.</div>';
+ var L=S.log.slice().sort(function(a,b){return a.d<b.d?1:a.d>b.d?-1:0}).slice(0,60);
+ $("lg").innerHTML=L.length?L.map(function(l){var v=val(l);return'<div class="row"><div class="nm"><b>'+esc(l.n)+'</b><small><input type="date" data-f="ld" data-id="'+l.id+'" value="'+l.d+'" aria-label="Tanggal"> ×<input type="number" min="1" data-f="lq" data-id="'+l.id+'" value="'+l.qty+'" aria-label="Jumlah"></small></div><span class="sign '+(v<0?"neg":"pos")+'">'+fmt(v)+'</span><button class="x" data-a="dl" data-id="'+l.id+'" aria-label="Hapus">×</button></div>'}).join(""):'<div class="empty">Belum ada catatan. Mulai dari tombol di atas.</div>';
+ $("ru").innerHTML='<b>Pelanggaran</b>'+S.v.map(function(r){return'<div class="ed"><input class="t" data-f="vn" data-id="'+r.id+'" value="'+esc(r.n)+'" aria-label="Nama"><input type="number" min="0" data-f="vp" data-id="'+r.id+'" value="'+r.p+'" aria-label="Poin"><button class="x" data-a="rv" data-id="'+r.id+'" aria-label="Hapus aturan">×</button></div>'}).join("")+'<button class="btn ghost" data-a="nv" style="margin:8px 0 18px">+ Pelanggaran baru</button><br><b>Penebusan</b>'+S.p.map(function(r){return'<div class="ed"><input class="t" data-f="pn" data-id="'+r.id+'" value="'+esc(r.n)+'" aria-label="Nama"><input type="number" min="0" data-f="pp" data-id="'+r.id+'" value="'+r.p+'" aria-label="Poin"><span class="lbl">per</span><input class="u" data-f="pu" data-id="'+r.id+'" value="'+esc(r.u)+'" aria-label="Satuan"><button class="x" data-a="rp" data-id="'+r.id+'" aria-label="Hapus aturan">×</button></div>'}).join("")+'<button class="btn ghost" data-a="np" style="margin-top:8px">+ Penebusan baru</button>';
+ $("bk").value=JSON.stringify(S);
+}
+function find(a,id){return a.filter(function(x){return x.id===id})[0]}
+function num(x,min){var n=Math.floor(Number(x));return isFinite(n)&&n>=min?n:min}
+document.addEventListener("click",function(e){
+ var el=e.target.closest("[data-a]");if(!el)return;var a=el.dataset.a,id=el.dataset.id;
+ if(a==="add"){var r=find(el.dataset.t==="v"?S.v:S.p,id);if(!r)return;var q=num(el.parentNode.querySelector("input").value,1);
+  S.log.push({id:uid(),t:el.dataset.t,n:r.n,pts:r.p,qty:q,d:dt.value||today()})}
+ else if(a==="dl"){S.log=S.log.filter(function(l){return l.id!==id})}
+ else if(a==="rv"){S.v=S.v.filter(function(x){return x.id!==id})}
+ else if(a==="rp"){S.p=S.p.filter(function(x){return x.id!==id})}
+ else if(a==="nv"){S.v.push({id:uid(),n:"Pelanggaran baru",p:5})}
+ else if(a==="np"){S.p.push({id:uid(),n:"Penebusan baru",p:1,u:"kali"})}
+ else if(a==="copy"){var t=$("bk");t.select();try{navigator.clipboard.writeText(t.value);$("bkm").textContent="Tersalin."}catch(x){$("bkm").textContent="Teks sudah terpilih; salin manual."}return}
+ else if(a==="restore"){try{var o=JSON.parse($("bk").value);if(!o.v||!o.p||!o.log)throw 0;S=o;$("bkm").textContent="Data dipulihkan."}catch(x){$("bkm").textContent="Teks cadangan tidak valid.";return}}
+ else if(a==="wipe"){if(!confirm("Hapus semua data dan kembali ke aturan awal?"))return;S=def()}
+ save();render()});
+document.addEventListener("change",function(e){
+ var el=e.target,f=el.dataset.f;if(!f)return;var id=el.dataset.id,r;
+ if(f==="ld"){r=find(S.log,id);if(r&&el.value)r.d=el.value}
+ else if(f==="lq"){r=find(S.log,id);if(r)r.qty=num(el.value,1)}
+ else if(f==="vn"){r=find(S.v,id);if(r)r.n=el.value||r.n}
+ else if(f==="vp"){r=find(S.v,id);if(r)r.p=num(el.value,0)}
+ else if(f==="pn"){r=find(S.p,id);if(r)r.n=el.value||r.n}
+ else if(f==="pp"){r=find(S.p,id);if(r)r.p=num(el.value,0)}
+ else if(f==="pu"){r=find(S.p,id);if(r)r.u=el.value||r.u}
+ save();render()});
+render();
+</script>
+<script>if("serviceWorker" in navigator){window.addEventListener("load",function(){navigator.serviceWorker.register("sw.js").catch(function(){})})}</script>
+</body>
+</html>
