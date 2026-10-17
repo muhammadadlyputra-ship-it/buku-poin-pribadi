@@ -17,6 +17,11 @@ jobs:
           java-version: 17
       - name: Pasang dependensi
         run: npm install
+      - name: Susun folder public dan assets
+        run: |
+          mkdir -p public assets
+          cp index.html manifest.webmanifest sw.js icon-192.png icon-512.png public/
+          cp icon.png assets/icon.png
       - name: Tambah proyek Android
         run: npx cap add android
       - name: Buat ikon aplikasi
